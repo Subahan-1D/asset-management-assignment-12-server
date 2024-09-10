@@ -276,67 +276,67 @@ async function run() {
 
     // get my assets ? employee assets
 
-    // app.get(
-    //   "/request_assets/myAssets/:email",
+    app.get(
+      "/request_assets/myAssets/:email",
 
-    //   async (req, res) => {
-    //     const email = req.params.email;
-    //     const search = req.query.searchValue;
-    //     const filter = req.query.filterValue;
-    //     const sortValue = req.query.sortValue;
-    //     console.log(search, filter, sortValue);
-    //     let query = {};
+      async (req, res) => {
+        const email = req.params.email;
+        const search = req.query.searchValue;
+        const filter = req.query.filterValue;
+        const sortValue = req.query.sortValue;
+        console.log(search, filter, sortValue);
+        let query = {};
 
-    //     if (email) {
-    //       query.employee_email = email;
-    //     }
+        if (email) {
+          query.employee_email = email;
+        }
 
-    //     if (email && search) {
-    //       query.$and = [
-    //         { employee_email: email },
-    //         { name: { $regex: search, $options: "i" } },
-    //       ];
-    //     }
-    //     if (email && filter) {
-    //       if (filter === "pending") {
-    //         query.$and = [{ employee_email: email }, { status: "pending" }];
-    //       }
-    //       if (filter === "approved") {
-    //         query.$and = [{ employee_email: email }, { status: "approved" }];
-    //       }
-    //       if (filter === "returnable") {
-    //         query.$and = [{ employee_email: email }, { type: "returnable" }];
-    //       }
-    //       if (filter === "non_returnable") {
-    //         query.$and = [{ employee_email: email }, { type: "non_returnable" }];
-    //       }
-    //     }
+        if (email && search) {
+          query.$and = [
+            { employee_email: email },
+            { name: { $regex: search, $options: "i" } },
+          ];
+        }
+        if (email && filter) {
+          if (filter === "pending") {
+            query.$and = [{ employee_email: email }, { status: "pending" }];
+          }
+          if (filter === "approved") {
+            query.$and = [{ employee_email: email }, { status: "approved" }];
+          }
+          if (filter === "returnable") {
+            query.$and = [{ employee_email: email }, { type: "returnable" }];
+          }
+          if (filter === "non_returnable") {
+            query.$and = [{ employee_email: email }, { type: "non_returnable" }];
+          }
+        }
 
-    //     const result = await requestAssetsCollection.find(query).toArray();
-    //     res.send(result);
-    //   }
-    // );
+        const result = await requestAssetsCollection.find(query).toArray();
+        res.send(result);
+      }
+    );
 
-    // app.post("/request_assets", async (req, res) => {
-    //   const reqInfo = req.body;
-    //   const result = await requestAssetsCollection.insertOne(reqInfo);
-    //   res.send(result);
-    // });
-    // // assets request reject
-    // app.patch("/request_assets/reject/:id", async (req, res) => {
-    //   const id = req.params.id;
-    //   const data = req.body;
-    //   const filter = { _id: new ObjectId(id) };
-    //   // console.log(id, data);
-    //   const updateDoc = {
-    //     $set: {
-    //       status: data.status,
-    //       note: data.note,
-    //     },
-    //   };
-    //   const result = await requestAssetsCollection.updateOne(filter, updateDoc);
-    //   res.send(result);
-    // });
+    app.post("/request_assets", async (req, res) => {
+      const reqInfo = req.body;
+      const result = await requestAssetsCollection.insertOne(reqInfo);
+      res.send(result);
+    });
+    // assets request reject
+    app.patch("/request_assets/reject/:id", async (req, res) => {
+      const id = req.params.id;
+      const data = req.body;
+      const filter = { _id: new ObjectId(id) };
+      // console.log(id, data);
+      const updateDoc = {
+        $set: {
+          status: data.status,
+          note: data.note,
+        },
+      };
+      const result = await requestAssetsCollection.updateOne(filter, updateDoc);
+      res.send(result);
+    });
 
     //-------------------------------------- asset return status update
     // app.patch("/request_assets/return/:id", async (req, res) => {
