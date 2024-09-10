@@ -251,28 +251,28 @@ async function run() {
       res.send(result);
     });
 
-    // // --------------------------------------------------employee_assets
-    // app.get("/request_assets/:email", async (req, res) => {
-    //   // console.log(search);
-    //   const email = req.params.email;
-    //   const search = req.query.searchValue;
-    //   // const query = { hr_email: email };
-    //   let query = {};
-    //   // get data by email
-    //   if (email) {
-    //     query.hr_email = email;
-    //   }
-    //   // get data bye product name as search
-    //   if (email && search) {
-    //     query.$and = [
-    //       { hr_email: email },
-    //       { employee_name: { $regex: search, $options: "i" } },
-    //     ];
-    //   }
-    //   const result = await requestAssetsCollection.find(query).toArray();
-    //   const isPanding = result.filter((item) => item.status === "pending");
-    //   res.send(isPanding);
-    // });
+    // employee_assets
+    app.get("/request_assets/:email", async (req, res) => {
+      // console.log(search);
+      const email = req.params.email;
+      const search = req.query.searchValue;
+      // const query = { hr_email: email };
+      let query = {};
+      // get data by email
+      if (email) {
+        query.hr_email = email;
+      }
+      // get data bye product name as search
+      if (email && search) {
+        query.$and = [
+          { hr_email: email },
+          { employee_name: { $regex: search, $options: "i" } },
+        ];
+      }
+      const result = await requestAssetsCollection.find(query).toArray();
+      const isPanding = result.filter((item) => item.status === "pending");
+      res.send(isPanding);
+    });
 
     //------------------------------------------------------- get my assets ? employee assets
 
