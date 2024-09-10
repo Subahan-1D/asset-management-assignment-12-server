@@ -213,30 +213,30 @@ async function run() {
       res.send(result);
     });
 
-    // app.patch("/assets/:id", async (req, res) => {
-    //   const id = req.params.id;
-    //   const item = req.body;
-    //   console.log(item);
-    //   const query = { _id: new ObjectId(id) };
-    //   const updateData = {
-    //     $set: {
-    //       product_name: item.product_name,
-    //       product_type: item.product_type,
-    //       product_quantity: item.product_quantity,
-    //       email: item.email,
-    //       added_date: item.added_date,
-    //     },
-    //   };
-    //   const result = await assetCollection.updateOne(query, updateData);
-    //   res.send(result);
-    // });
+    app.patch("/assets/:id", async (req, res) => {
+      const id = req.params.id;
+      const item = req.body;
+      console.log(item);
+      const query = { _id: new ObjectId(id) };
+      const updateData = {
+        $set: {
+          product_name: item.product_name,
+          product_type: item.product_type,
+          product_quantity: item.product_quantity,
+          email: item.email,
+          added_date: item.added_date,
+        },
+      };
+      const result = await assetCollection.updateOne(query, updateData);
+      res.send(result);
+    });
 
-    // app.delete("/deleteAssets/:id", async (req, res) => {
-    //   const id = req.params.id;
-    //   const query = { _id: new ObjectId(id) };
-    //   const result = await assetCollection.deleteOne(query);
-    //   res.send(result);
-    // });
+    app.delete("/deleteAssets/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await assetCollection.deleteOne(query);
+      res.send(result);
+    });
 
     // // decriment product quantity
     // app.patch("/asset/dicriment/:id", async (req, res) => {
