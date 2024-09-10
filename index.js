@@ -338,32 +338,32 @@ async function run() {
       res.send(result);
     });
 
-    //-------------------------------------- asset return status update
-    // app.patch("/request_assets/return/:id", async (req, res) => {
-    //   const id = req.params.id;
-    //   const query = { _id: new ObjectId(id) };
-    //   const update = {
-    //     $set: {
-    //       status: "returned",
-    //     },
-    //   };
-    //   const result = await requestAssetsCollection.updateOne(query, update);
-    //   res.send(result);
-    // });
+    // asset return status update
+    app.patch("/request_assets/return/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const update = {
+        $set: {
+          status: "returned",
+        },
+      };
+      const result = await requestAssetsCollection.updateOne(query, update);
+      res.send(result);
+    });
 
-    //  increased product quantity after return
-    // app.patch("/asset/increase/:id", async (req, res) => {
-    //   const id = req.params.id;
-    //   console.log(id);
-    //   const query = { _id: new ObjectId(id) };
-    //   const updateData = {
-    //     $inc: {
-    //       product_quantity: +1,
-    //     },
-    //   };
-    //   const result = await assetCollection.updateOne(query, updateData);
-    //   res.send(result);
-    // });
+     increased product quantity after return
+    app.patch("/asset/increase/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const query = { _id: new ObjectId(id) };
+      const updateData = {
+        $inc: {
+          product_quantity: +1,
+        },
+      };
+      const result = await assetCollection.updateOne(query, updateData);
+      res.send(result);
+    });
 
     // // assets request approved
     // app.patch("/request_assets/approdev/:id", async (req, res) => {
