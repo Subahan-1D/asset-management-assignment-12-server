@@ -176,36 +176,36 @@ async function run() {
         ];
       }
       // get data by filter
-    //   if (filter && email) {
-    //     // const filterObj = JSON.parse(filter);
+      if (filter && email) {
+        // const filterObj = JSON.parse(filter);
 
-    //     if (filter === "returnable") {
-    //       query.$and = [
-    //         { email: email },
-    //         {
-    //           product_type: "returnable",
-    //         },
-    //       ];
-    //     }
-    //     if (filter === "non_returnable") {
-    //       query.$and = [{ email: email }, { product_type: "non_returnable" }];
-    //     }
-    //     if (filter == "out_of_stock") {
-    //       query.$and = [{ email: email }, { product_quantity: { $lt: 1 } }];
-    //       console.log("out of stock");
-    //     }
-    //     if (filter === "Available") {
-    //       query.$and = [{ email: email }, { product_quantity: { $gt: 0 } }];
-    //     }
-    //   }
-    //   let sortObj = {};
-    //   if (sortValue) {
-    //     console.log("sort");
-    //     sortObj = { product_quantity: -1 };
-    //   }
-    //   const result = await assetCollection.find(query).sort(sortObj).toArray();
-    //   res.send(result);
-    // });
+        if (filter === "returnable") {
+          query.$and = [
+            { email: email },
+            {
+              product_type: "returnable",
+            },
+          ];
+        }
+        if (filter === "non_returnable") {
+          query.$and = [{ email: email }, { product_type: "non_returnable" }];
+        }
+        if (filter == "out_of_stock") {
+          query.$and = [{ email: email }, { product_quantity: { $lt: 1 } }];
+          console.log("out of stock");
+        }
+        if (filter === "Available") {
+          query.$and = [{ email: email }, { product_quantity: { $gt: 0 } }];
+        }
+      }
+      let sortObj = {};
+      if (sortValue) {
+        console.log("sort");
+        sortObj = { product_quantity: -1 };
+      }
+      const result = await assetCollection.find(query).sort(sortObj).toArray();
+      res.send(result);
+    });
 
     app.post("/assets", async (req, res) => {
       const item = req.body;
