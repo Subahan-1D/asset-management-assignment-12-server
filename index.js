@@ -274,7 +274,7 @@ async function run() {
       res.send(isPanding);
     });
 
-    //------------------------------------------------------- get my assets ? employee assets
+    // get my assets ? employee assets
 
     // app.get(
     //   "/request_assets/myAssets/:email",
