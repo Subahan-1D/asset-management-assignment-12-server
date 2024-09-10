@@ -28,17 +28,17 @@ async function run() {
     const subscribe_cardCollection = client
       .db("assetManagement")
       .collection("subscribe_card");
-    // const subscriptionsCollection = client
-    //   .db("assetManagement")
-    //   .collection("subscriptions");
-    // const paymentCollection = client.db("assetManagement").collection("payments");
-    // const assetCollection = client.db("assetManagement").collection("assets");
-    // const myEmployeeCollection = client
-    //   .db("assetManagement")
-    //   .collection("my_employee");
-    // const requestAssetsCollection = client
-    //   .db("assetManagement")
-    //   .collection("request_assets");
+    const subscriptionsCollection = client
+      .db("assetManagement")
+      .collection("subscriptions");
+    const paymentCollection = client.db("assetManagement").collection("payments");
+    const assetCollection = client.db("assetManagement").collection("assets");
+    const myEmployeeCollection = client
+      .db("assetManagement")
+      .collection("my_employee");
+    const requestAssetsCollection = client
+      .db("assetManagement")
+      .collection("request_assets");
 
     // jwt related Api
     app.post("/jwt", async (req, res) => {
