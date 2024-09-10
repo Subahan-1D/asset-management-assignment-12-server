@@ -65,7 +65,7 @@ async function run() {
       });
     };
 
-    // -----------------------------------------------PAYMENT INTENT
+    // -PAYMENT INTENT
 
     // app.post("/create-payment-intent", async (req, res) => {
     //   const { price } = req.body;
