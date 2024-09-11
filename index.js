@@ -327,7 +327,7 @@ async function run() {
       }
     );
 
-    // request for asset email 
+    // request for asset email
     app.get("/requestForAsset/:email", async (req, res) => {
       const email = req.params.email;
       const search = req.query.searchValue;
@@ -466,11 +466,10 @@ async function run() {
       const result = await subscriptionsCollection.insertOne(subsInfo);
       res.send(result);
     });
+    // my team section
+
     app.get("/my_team/:email", async (req, res) => {
-      // console.log(email);
-      const query = {
-        hrEmail: email,
-      };
+      const query = { hrEmail: email };
       const result = await myEmployeeCollection.find(query).toArray();
       res.send(result);
     });
