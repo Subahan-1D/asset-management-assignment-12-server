@@ -467,16 +467,18 @@ async function run() {
       res.send(result);
     });
     // my team section
-
     app.get("/my_team/:email", async (req, res) => {
-      const query = { hrEmail: email };
+      const email = req.body
+      console.log(email)
+      // const query = { hr_Email: email };
+      const query = {}
       const result = await myEmployeeCollection.find(query).toArray();
       res.send(result);
     });
     app.get("/my_employee/:email", async (req, res) => {
       const email = req.params.email;
       const query = {
-        hrEmail: email,
+        hrEmail: email
       };
       const result = await myEmployeeCollection.find(query).toArray();
       res.send(result);
