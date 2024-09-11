@@ -352,18 +352,18 @@ async function run() {
     });
 
     //  increased product quantity after return
-    // app.patch("/asset/increase/:id", async (req, res) => {
-    //   const id = req.params.id;
-    //   console.log(id);
-    //   const query = { _id: new ObjectId(id) };
-    //   const updateData = {
-    //     $inc: {
-    //       product_quantity: +1,
-    //     },
-    //   };
-    //   const result = await assetCollection.updateOne(query, updateData);
-    //   res.send(result);
-    // });
+    app.patch("/asset/increase/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const query = { _id: new ObjectId(id) };
+      const updateData = {
+        $inc: {
+          product_quantity: +1,
+        },
+      };
+      const result = await assetCollection.updateOne(query, updateData);
+      res.send(result);
+    });
 
     // assets request approved
     app.patch("/request_assets/approdev/:id", async (req, res) => {
