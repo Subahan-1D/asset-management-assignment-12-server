@@ -67,21 +67,21 @@ async function run() {
 
     // -PAYMENT INTENT
 
-    // app.post("/create-payment-intent", async (req, res) => {
-    //   const { price } = req.body;
-    //   const amount = parseInt(price * 100);
-    //   // console.log(amount, "amount inside the intent");
+    app.post("/create-payment-intent", async (req, res) => {
+      const { price } = req.body;
+      const amount = parseInt(price * 100);
+      // console.log(amount, "amount inside the intent");
 
-    //   const paymentIntent = await stripe.paymentIntents.create({
-    //     amount: amount,
-    //     currency: "usd",
-    //     payment_method_types: ["card"],
-    //   });
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: amount,
+        currency: "usd",
+        payment_method_types: ["card"],
+      });
 
-    //   res.send({
-    //     clientSecret: paymentIntent.client_secret,
-    //   });
-    // });
+      res.send({
+        clientSecret: paymentIntent.client_secret,
+      });
+    });
 
     // ---------------------------------------------------------------------user
 
@@ -251,7 +251,7 @@ async function run() {
       res.send(result);
     });
 
-    // employee_assets
+    // --------------------------------------------------employee_assets
     app.get("/request_assets/:email", async (req, res) => {
       // console.log(search);
       const email = req.params.email;
@@ -274,7 +274,7 @@ async function run() {
       res.send(isPanding);
     });
 
-    // get my assets ? employee assets
+    //------------------------------------------------------- get my assets ? employee assets
 
     app.get(
       "/request_assets/myAssets/:email",
@@ -338,7 +338,7 @@ async function run() {
       res.send(result);
     });
 
-    // asset return status update
+    //-------------------------------------- asset return status update
     app.patch("/request_assets/return/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -351,21 +351,21 @@ async function run() {
       res.send(result);
     });
 
-     increased product quantity after return
-    app.patch("/asset/increase/:id", async (req, res) => {
-      const id = req.params.id;
-      console.log(id);
-      const query = { _id: new ObjectId(id) };
-      const updateData = {
-        $inc: {
-          product_quantity: +1,
-        },
-      };
-      const result = await assetCollection.updateOne(query, updateData);
-      res.send(result);
-    });
+    //  increased product quantity after return
+    // app.patch("/asset/increase/:id", async (req, res) => {
+    //   const id = req.params.id;
+    //   console.log(id);
+    //   const query = { _id: new ObjectId(id) };
+    //   const updateData = {
+    //     $inc: {
+    //       product_quantity: +1,
+    //     },
+    //   };
+    //   const result = await assetCollection.updateOne(query, updateData);
+    //   res.send(result);
+    // });
 
-    // // assets request approved
+    // assets request approved
     // app.patch("/request_assets/approdev/:id", async (req, res) => {
     //   const id = req.params.id;
     //   const data = req.body;
@@ -382,94 +382,94 @@ async function run() {
     //   res.send(result);
     // });
 
-    // app.get("/subscribe_card", async (req, res) => {
-    //   const result = await subscribe_cardCollection.find().toArray();
-    //   res.send(result);
-    // });
+    app.get("/subscribe_card", async (req, res) => {
+      const result = await subscribe_cardCollection.find().toArray();
+      res.send(result);
+    });
 
-    // app.get("/subscriptions/:email", async (req, res) => {
-    //   const email = req.params.email;
-    //   const query = { email };
-    //   const result = await subscriptionsCollection.findOne(query);
-    //   res.send(result);
-    // });
+    app.get("/subscriptions/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email };
+      const result = await subscriptionsCollection.findOne(query);
+      res.send(result);
+    });
 
-    // app.patch("/subscriptions", async (req, res) => {
-    //   const subsInfo = req.body;
-    //   const newMember = subsInfo.member;
-    //   // console.log(newMember, "fdsadfhkdjsahjk");
-    //   // checking not exist email
-    //   const query = { email: subsInfo.email };
-    //   const existingUser = await subscriptionsCollection.findOne(query);
+    app.patch("/subscriptions", async (req, res) => {
+      const subsInfo = req.body;
+      const newMember = subsInfo.member;
+      // console.log(newMember, "fdsadfhkdjsahjk");
+      // checking not exist email
+      const query = { email: subsInfo.email };
+      const existingUser = await subscriptionsCollection.findOne(query);
 
-    //   // update package
-    //   const options = {
-    //     $set: { member: newMember },
-    //   };
-    //   if (existingUser) {
-    //     const result = await subscriptionsCollection.updateOne(query, options);
-    //     return res.send(result);
-    //   }
-    //   const result = await subscriptionsCollection.insertOne(subsInfo);
-    //   res.send(result);
-    // });
+      // update package
+      const options = {
+        $set: { member: newMember },
+      };
+      if (existingUser) {
+        const result = await subscriptionsCollection.updateOne(query, options);
+        return res.send(result);
+      }
+      const result = await subscriptionsCollection.insertOne(subsInfo);
+      res.send(result);
+    });
 
-    // app.get("/my_team/:email", async (req, res) => {
-    //   const email = req.params.email;
-    //   console.log(email);
-    //   const query = {
-    //     hrEmail: email,
-    //   };
-    //   const result = await myEmployeeCollection.find(query).toArray();
-    //   res.send(result);
-    // });
-    // app.get("/my_employee/:email", async (req, res) => {
-    //   const email = req.params.email;
-    //   const query = {
-    //     hrEmail: email,
-    //   };
-    //   const result = await myEmployeeCollection.find(query).toArray();
-    //   res.send(result);
-    // });
+    app.get("/my_team/:email", async (req, res) => {
+      const email = req.params.email;
+      console.log(email);
+      const query = {
+        hrEmail: email,
+      };
+      const result = await myEmployeeCollection.find(query).toArray();
+      res.send(result);
+    });
+    app.get("/my_employee/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = {
+        hrEmail: email,
+      };
+      const result = await myEmployeeCollection.find(query).toArray();
+      res.send(result);
+    });
 
-    // app.post("/my_employee", async (req, res) => {
-    //   const employee = req.body;
-    //   // if add and employee incress the add employee limit
-    //   const query = { email: employee.hrEmail };
-    //   const existingUser = await subscriptionsCollection.findOne(query);
-    //   // console.log(existingUser);
-    //   const options = {
-    //     $inc: { member: -1 },
-    //   };
-    //   if (existingUser) {
-    //     const result = await subscriptionsCollection.updateOne(query, options);
-    //     const result2 = await myEmployeeCollection.insertOne(employee);
-    //     return res.send({ result, result2 });
-    //   }
-    //   res.send({ message: "user not found" });
-    // });
+    app.post("/my_employee", async (req, res) => {
+      const employee = req.body;
+      // if add and employee incress the add employee limit
+      const query = { email: employee.hrEmail };
+      const existingUser = await subscriptionsCollection.findOne(query);
+      // console.log(existingUser);
+      const options = {
+        $inc: { member: -1 },
+      };
+      if (existingUser) {
+        const result = await subscriptionsCollection.updateOne(query, options);
+        const result2 = await myEmployeeCollection.insertOne(employee);
+        return res.send({ result, result2 });
+      }
+      res.send({ message: "user not found" });
+    });
 
-    // app.delete("/my_employee/:email", async (req, res) => {
-    //   const email = req.params.email;
-    //   const hrEmail = req.query.hrEmail;
-    //   const myquery = {
-    //     employee_email: email,
-    //   };
-    //   // if add and employee incress the add employee limit
-    //   const query = { email: hrEmail };
-    //   const existingUser = await subscriptionsCollection.findOne(query);
-    //   const options = {
-    //     $inc: { member: 1 },
-    //   };
-    //   // console.log(hrEmail);
-    //   if (existingUser) {
-    //     const result = await subscriptionsCollection.updateOne(query, options);
-    //     const result2 = await myEmployeeCollection.deleteOne(myquery);
-    //     return res.send({ result, result2 });
-    //   }
+    app.delete("/my_employee/:email", async (req, res) => {
+      const email = req.params.email;
+      const hrEmail = req.query.hrEmail;
+      const myquery = {
+        employee_email: email,
+      };
+      // if add and employee incress the add employee limit
+      const query = { email: hrEmail };
+      const existingUser = await subscriptionsCollection.findOne(query);
+      const options = {
+        $inc: { member: 1 },
+      };
+      // console.log(hrEmail);
+      if (existingUser) {
+        const result = await subscriptionsCollection.updateOne(query, options);
+        const result2 = await myEmployeeCollection.deleteOne(myquery);
+        return res.send({ result, result2 });
+      }
 
-    //   res.send({ message: "users not found" });
-    // });
+      res.send({ message: "users not found" });
+    });
 
     // add payment history and delete paymented items
     app.post("/payments", async (req, res) => {
@@ -482,7 +482,6 @@ async function run() {
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
   } finally {
-    //
   }
 }
 run().catch(console.dir);
