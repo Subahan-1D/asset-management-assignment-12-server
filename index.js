@@ -11,8 +11,7 @@ const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 app.use(cors({ origin: ["http://localhost:5173"], credentials: true }));
 app.use(express.json());
 
-const uri =
-  `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.yqmtelq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.yqmtelq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
   serverApi: {
@@ -31,7 +30,9 @@ async function run() {
     const subscriptionsCollection = client
       .db("assetManagement")
       .collection("subscriptions");
-    const paymentCollection = client.db("assetManagement").collection("payments");
+    const paymentCollection = client
+      .db("assetManagement")
+      .collection("payments");
     const assetCollection = client.db("assetManagement").collection("assets");
     const myEmployeeCollection = client
       .db("assetManagement")
@@ -51,14 +52,14 @@ async function run() {
 
     // middlewares
     const verifyToken = (req, res, next) => {
-      console.log("insite verify token:", req.headers.authorization);
+      console.log("inside verify token:", req.headers.authorization);
       if (!req.headers.authorization) {
-        return res.status(401).send({ message: "Unathoorized  access" });
+        return res.status(401).send({ message: "Unauthorized  access" });
       }
       const token = req.headers.authorization;
       jwt.verify(token, process.env.ACCESS_TOKEN, (err, decoded) => {
         if (err) {
-          return res.status(401).send({ message: "forbiden access" });
+          return res.status(401).send({ message: "forbidden access" });
         }
         req.decoded = decoded;
         next();
@@ -83,7 +84,7 @@ async function run() {
       });
     });
 
-    // ---------------------------------------------------------------------user
+    // user
 
     // get all employee only
     app.get("/all_users", async (req, res) => {
@@ -124,7 +125,7 @@ async function run() {
       const user = req.body;
       // checking not exist email
       const query = { email: user.email };
-      // ------------------------------------------------------update name
+      // ---------------------update name
       // console.log(user);
       const updateName = {
         $set: {
@@ -148,7 +149,7 @@ async function run() {
       res.send(result);
     });
 
-    // ------------------------------------------------------------------------hr manager
+    // --hr manager
 
     app.get("/anAssets/:id", async (req, res) => {
       const id = req.params.id;
@@ -177,8 +178,6 @@ async function run() {
       }
       // get data by filter
       if (filter && email) {
-        // const filterObj = JSON.parse(filter);
-
         if (filter === "returnable") {
           query.$and = [
             { email: email },
@@ -258,6 +257,7 @@ async function run() {
       const search = req.query.searchValue;
       // const query = { hr_email: email };
       let query = {};
+
       // get data by email
       if (email) {
         query.hr_email = email;
@@ -269,12 +269,19 @@ async function run() {
           { employee_name: { $regex: search, $options: "i" } },
         ];
       }
+      console.log(query);
       const result = await requestAssetsCollection.find(query).toArray();
       const isPanding = result.filter((item) => item.status === "pending");
       res.send(isPanding);
     });
+    //  app.get("/request_assets/:email", async (req, res) => {
+    //    const email = req.params.email;
+    //    const query = { email: email };
+    //    const result = await requestAssetsCollection.find(query).toArray();
+    //    res.send(result);
+    //  });
 
-    //------------------------------------------------------- get my assets ? employee assets
+    // get my assets ? employee assets
 
     app.get(
       "/request_assets/myAssets/:email",
@@ -308,7 +315,10 @@ async function run() {
             query.$and = [{ employee_email: email }, { type: "returnable" }];
           }
           if (filter === "non_returnable") {
-            query.$and = [{ employee_email: email }, { type: "non_returnable" }];
+            query.$and = [
+              { employee_email: email },
+              { type: "non_returnable" },
+            ];
           }
         }
 
@@ -316,6 +326,52 @@ async function run() {
         res.send(result);
       }
     );
+
+    // request for asset email 
+    app.get("/requestForAsset/:email", async (req, res) => {
+      const email = req.params.email;
+      const search = req.query.searchValue;
+      const filter = req.query.filterValue;
+      console.log(search, filter, "Hello");
+      let query = {};
+      // get data by email
+      if (email) {
+        query.email = email;
+      }
+      // get data bye product name as search
+      if (email && search) {
+        query.$and = [
+          { email: email },
+          { product_name: { $regex: search, $options: "i" } },
+        ];
+      }
+      // get data by filter
+      if (filter && email) {
+        // const filterObj = JSON.parse(filter);
+
+        if (filter === "returnable") {
+          query.$and = [
+            { email: email },
+            {
+              product_type: "returnable",
+            },
+          ];
+        }
+        if (filter === "non_returnable") {
+          query.$and = [{ email: email }, { product_type: "non_returnable" }];
+        }
+        if (filter == "out_of_stock") {
+          query.$and = [{ email: email }, { product_quantity: { $lt: 1 } }];
+          console.log("out of stock");
+        }
+        if (filter === "Available") {
+          query.$and = [{ email: email }, { product_quantity: { $gt: 0 } }];
+        }
+      }
+
+      const result = await assetCollection.find(query).toArray();
+      res.send(result);
+    });
 
     app.post("/request_assets", async (req, res) => {
       const reqInfo = req.body;
@@ -338,7 +394,7 @@ async function run() {
       res.send(result);
     });
 
-    //-------------------------------------- asset return status update
+    // asset return status update
     app.patch("/request_assets/return/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -397,11 +453,8 @@ async function run() {
     app.patch("/subscriptions", async (req, res) => {
       const subsInfo = req.body;
       const newMember = subsInfo.member;
-      // console.log(newMember, "fdsadfhkdjsahjk");
-      // checking not exist email
       const query = { email: subsInfo.email };
       const existingUser = await subscriptionsCollection.findOne(query);
-
       // update package
       const options = {
         $set: { member: newMember },
@@ -413,10 +466,8 @@ async function run() {
       const result = await subscriptionsCollection.insertOne(subsInfo);
       res.send(result);
     });
-
     app.get("/my_team/:email", async (req, res) => {
-      const email = req.params.email;
-      console.log(email);
+      // console.log(email);
       const query = {
         hrEmail: email,
       };
