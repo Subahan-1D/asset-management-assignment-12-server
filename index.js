@@ -366,21 +366,21 @@ async function run() {
     // });
 
     // assets request approved
-    // app.patch("/request_assets/approdev/:id", async (req, res) => {
-    //   const id = req.params.id;
-    //   const data = req.body;
-    //   const filter = { _id: new ObjectId(id) };
-    //   console.log(id, data);
-    //   const updateDoc = {
-    //     $set: {
-    //       status: data.status,
-    //       note: data.note,
-    //       Aproved_date: data.Aproved_date,
-    //     },
-    //   };
-    //   const result = await requestAssetsCollection.updateOne(filter, updateDoc);
-    //   res.send(result);
-    // });
+    app.patch("/request_assets/approdev/:id", async (req, res) => {
+      const id = req.params.id;
+      const data = req.body;
+      const filter = { _id: new ObjectId(id) };
+      console.log(id, data);
+      const updateDoc = {
+        $set: {
+          status: data.status,
+          note: data.note,
+          Aproved_date: data.Aproved_date,
+        },
+      };
+      const result = await requestAssetsCollection.updateOne(filter, updateDoc);
+      res.send(result);
+    });
 
     app.get("/subscribe_card", async (req, res) => {
       const result = await subscribe_cardCollection.find().toArray();
