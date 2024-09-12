@@ -8,7 +8,7 @@ const port = process.env.PORT || 9000;
 
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 // middleware
-app.use(cors({ origin: ["http://localhost:5173"], credentials: true }));
+app.use(cors({ origin: ["http://localhost:5173" ,""], credentials: true }));
 app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.yqmtelq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
@@ -466,11 +466,15 @@ async function run() {
       res.send(result);
     });
     // my team section
+
+ 
+
     app.get("/my_team/:email", async (req, res) => {
-      const email = req.body
+      const email = req.params.email
       console.log(email)
+      const query ={}
       // const query = { hr_Email: email };
-      const query = {}
+
       const result = await myEmployeeCollection.find(query).toArray();
       res.send(result);
     });
@@ -528,10 +532,6 @@ async function run() {
       const paymentResult = await paymentCollection.insertOne(payment);
       res.send({ paymentResult });
     });
-
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
   } finally {
   }
 }
