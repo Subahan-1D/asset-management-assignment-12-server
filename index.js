@@ -368,7 +368,6 @@ async function run() {
           query.$and = [{ email: email }, { product_quantity: { $gt: 0 } }];
         }
       }
-
       const result = await assetCollection.find(query).toArray();
       res.send(result);
     });
